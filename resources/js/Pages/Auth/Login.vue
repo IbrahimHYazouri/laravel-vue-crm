@@ -36,6 +36,11 @@ const submit = () => {
         </div>
 
         <form @submit.prevent="submit">
+            <div class="flex items-center flex-col mb-5">
+                <h1 class="text-2xl font-bold mb-1">Login</h1>
+                <p class="text-zinc-500">Sign in to your account</p>
+            </div>
+
             <div>
                 <InputLabel for="email" value="Email" />
 
@@ -65,6 +70,14 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
+
+                <Link
+                    v-if="canResetPassword"
+                    :href="route('password.request')"
+                    class="rounded-md text-sm text-indigo-600 underline hover:text-indigo-700 focus:outline-none"
+                >
+                    Forgot your password?
+                </Link>
             </div>
 
             <div class="mt-4 block">
@@ -76,22 +89,24 @@ const submit = () => {
                 </label>
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
+            <div class="mt-4 flex items-center justify-end flex-col gap-4">
+                <button
+                    class="w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white"
+                    :class="{'opacity-25': form.processing}"
                     :disabled="form.processing"
                 >
-                    Log in
-                </PrimaryButton>
+                    Sign in
+                </button>
+
+                <p class="text-sm text-zinc-600">
+                    Don't have an account?
+                    <Link
+                        :href="route('register')"
+                        class="rounded-md text-sm text-indigo-600 underline hover:text-indigo-700 focus:outline-none"
+                    >
+                        Sign up
+                    </Link>
+                </p>
             </div>
         </form>
     </GuestLayout>

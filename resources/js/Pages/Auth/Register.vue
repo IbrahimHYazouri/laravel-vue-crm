@@ -27,6 +27,11 @@ const submit = () => {
         <Head title="Register" />
 
         <form @submit.prevent="submit">
+            <div class="flex items-center flex-col mb-5">
+                <h1 class="text-2xl font-bold mb-1">Register</h1>
+                <p class="text-zinc-500">Create new account</p>
+            </div>
+
             <div>
                 <InputLabel for="name" value="Name" />
 
@@ -94,21 +99,24 @@ const submit = () => {
                 />
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
+            <div class="mt-4 flex items-center justify-end flex-col gap-4">
+                <button
+                    class="w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white"
+                    :class="{'opacity-25': form.processing}"
                     :disabled="form.processing"
                 >
                     Register
-                </PrimaryButton>
+                </button>
+
+               <p class="text-sm text-zinc-600">
+                   Already have an account?
+                   <Link
+                       :href="route('login')"
+                       class="rounded-md text-sm text-indigo-600 underline hover:text-indigo-700 focus:outline-none"
+                   >
+                       Login
+                   </Link>
+               </p>
             </div>
         </form>
     </GuestLayout>
