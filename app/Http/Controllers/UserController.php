@@ -13,7 +13,11 @@ class UserController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Users/Index');
+        $users = User::query()
+            ->with('roles')
+            ->paginate(20);
+
+        return Inertia::render('Users/Index', ['users' => $users]);
     }
 
     public function create(): Response
