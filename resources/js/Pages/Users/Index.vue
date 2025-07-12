@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { Head, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
@@ -9,7 +9,9 @@ import { Head } from '@inertiajs/vue3';
         <div class="m-4 rounded-md bg-gray-200">
             <p class="p-2 border-b">Users</p>
             <div class="p-2 bg-white flex flex-col gap-5">
-                <button class="w-fit px-2 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">+ Add User</button>
+                <Link
+                    :href="route('users.create')"
+                    class="w-fit px-2 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">+ Add User</Link>
                 <hr />
                 <button class="w-fit px-2 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 border-b">Show deleted users</button>
             </div>
