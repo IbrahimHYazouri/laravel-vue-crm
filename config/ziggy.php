@@ -9,5 +9,5 @@ return [
         'webhooks.*',
         'telescope.*',
         'horizon.*',
-    ]
+    ],
 ];
