@@ -2,10 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Inertia\Response;
+use Spatie\Permission\Models\Role;
+
 class UserController extends Controller
 {
-    public function index(): \Inertia\Response|\Inertia\ResponseFactory
+    public function index(): Response
     {
-        return inertia('Users');
+        return Inertia::render('Users/Index');
+    }
+
+    public function create(): Response
+    {
+        $roles = Role::all();
+
+        return Inertia::render('Users/Create', ['roles' => $roles]);
+    }
+
+    public function store(StoreUserRequest $request): RedirectResponse
+    {
+        $user = User::create($request->validated());
+
+        if ($request->has('terms_accepted')) {
+            $user->terms_accepted_at = now();
+            $user->save();
+        }
+
+        if ($request->has('role')) {
+            $user->syncRoles($request->role);
+        }
+
+        return redirect()->route('users.index')->with('status', __('User successfully created.'));
     }
 }
