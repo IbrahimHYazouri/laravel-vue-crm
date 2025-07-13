@@ -106,8 +106,10 @@ const sidebarOpen = ref(false);
                             </li>
 
                             <li>
-                                <span
+                                <Link
+                                    :href="route('clients.index')"
                                     class="flex items-center gap-3 px-3 py-2 rounded text-sm font-medium transition hover:bg-gray-200"
+                                    :class="{ 'bg-gray-300': route().current('clients.index') }"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24"><g
                                         fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -115,7 +117,7 @@ const sidebarOpen = ref(false);
                                         d="M15 2H9c-3.31 0-4 .69-4 4v16h14V6c0-3.31-.69-4-4-4M3 22h18"/><path
                                         d="M15 22v-3c0-1.655-.345-2-2-2h-2c-1.655 0-2 .345-2 2v3m4.5-16h-3m3 3.5h-3m3 3.5h-3"/></g></svg>
                                     <span v-show="sidebarOpen">Clients</span>
-                                </span>
+                                </Link>
                             </li>
 
                             <li>
@@ -145,7 +147,7 @@ const sidebarOpen = ref(false);
             </aside>
 
             <!-- Main -->
-            <main :class="{ 'ml-10 md:ml-64': sidebarOpen, 'ml-10 md:ml-16': !sidebarOpen }"
+            <main
                   class="flex-1 transition-all duration-200">
                 <Notification/>
                 <slot/>
