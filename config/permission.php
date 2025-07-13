@@ -139,8 +139,8 @@ return [
     'team_resolver' => \Spatie\Permission\DefaultTeamResolver::class,
 
     /*
-     * Passport Client Credentials Grant
-     * When set to true the package will use Passports Client to check permissions
+     * Passport Clients Credentials Grant
+     * When set to true the package will use Passports Clients to check permissions
      */
 
     'use_passport_client_credentials' => false,
