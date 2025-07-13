@@ -7,28 +7,41 @@ import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import {Role} from "@/types/role";
 
-defineProps<{
+interface User {
+    id: string
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    address: string
+    phone_number: string
     roles: Role[]
+    terms_accepted_at: string
+}
+
+const props = defineProps<{
+    roles: Role[],
+    user: User
 }>();
 
 const form = useForm({
-    first_name: '',
-    last_name: '',
-    email: '',
-    password: '',
-    address: '',
-    phone_number: '',
-    role: '',
-    terms_accepted: false,
+    first_name: props.user.first_name,
+    last_name: props.user.last_name,
+    email: props.user.email,
+    password: props.user.password,
+    address: props.user.address,
+    phone_number: props.user.phone_number,
+    role: props.user.roles.map(role => role.name).join(', '),
+    terms_accepted: !!props.user.terms_accepted_at,
 })
 
 const createUser = () => {
-    form.post(route('users.store'));
+    form.put(route('users.update', props.user.id));
 }
 </script>
 
 <template>
-    <Head title="Create User"/>
+    <Head title="Update User"/>
 
     <AuthenticatedLayout>
         <div
@@ -39,7 +52,7 @@ const createUser = () => {
                         <div class="space-y-6 col-span-2">
                             <h3
                                 class="text-lg font-medium text-gray-800  border-b border-gray-200 pb-2">
-                                Create User</h3>
+                                Update User</h3>
                         </div>
 
                         <div>
@@ -148,7 +161,7 @@ const createUser = () => {
                             <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Role</label>
                             <select id="role" name="role"
                                     v-model="form.role"
-                                class="w-full px-4 py-2 rounded-lg text-gray-700  bg-gray-50  border border-gray-300"
+                                    class="w-full px-4 py-2 rounded-lg text-gray-700  bg-gray-50  border border-gray-300"
                             >
                                 <option
                                     v-for="role in roles"
@@ -171,11 +184,11 @@ const createUser = () => {
                     <div class="mt-8 pt-5 border-t border-gray-200 dark:border-gray-700">
                         <div class="flex justify-end space-x-3">
                             <Link :href="route('users.index')"
-                               class="px-4 py-2 border border-gray-300  rounded-md shadow-sm text-sm font-medium text-gray-700  bg-white  hover:bg-gray-50  focus:outline-none">
+                                  class="px-4 py-2 border border-gray-300  rounded-md shadow-sm text-sm font-medium text-gray-700  bg-white  hover:bg-gray-50  focus:outline-none">
                                 Cancel
                             </Link>
                             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                                Create User
+                                Update User
                             </button>
                         </div>
                     </div>
