@@ -1,40 +1,55 @@
 <script setup lang="ts">
 import {Head, Link, useForm} from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Checkbox from "@/Components/Checkbox.vue";
 import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 
+interface Client {
+    id: number
+    contact_name: string
+    contact_email: string
+    contact_phone_number: string
+    company_name: string
+    company_address: string
+    company_city: string
+    company_zip: string
+    company_vat: number
+}
+
+const props = defineProps<{
+    client: Client
+}>();
+
 const form = useForm({
-    contact_name: '',
-    contact_email: '',
-    contact_phone_number: '',
-    company_name: '',
-    company_address: '',
-    company_city: '',
-    company_zip: '',
-    company_vat: '',
+    contact_name: props.client.contact_name,
+    contact_email: props.client.contact_email,
+    contact_phone_number: props.client.contact_phone_number,
+    company_name: props.client.company_name,
+    company_address: props.client.company_address,
+    company_city: props.client.company_city,
+    company_zip: props.client.company_zip,
+    company_vat: props.client.company_vat,
 })
 
-const createClient = () => {
-    form.post(route('clients.store'));
+const updateClient = () => {
+    form.put(route('clients.update', props.client.id));
 }
 </script>
 
 <template>
-    <Head title="Create Client"/>
+    <Head title="Update Client"/>
 
     <AuthenticatedLayout>
         <div
             class="bg-white  rounded-lg shadow-sm border border-gray-200  overflow-hidden mb-6">
             <div class="p-6">
-                <form @submit.prevent="createClient" class="mt-6 space-y-6">
+                <form @submit.prevent="updateClient" class="mt-6 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-6 col-span-2">
                             <h3
                                 class="text-lg font-medium text-gray-800  border-b border-gray-200 pb-2">
-                                Create Client</h3>
+                                Update Client</h3>
                         </div>
 
                         <div>
@@ -182,7 +197,7 @@ const createClient = () => {
                                 Cancel
                             </Link>
                             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                                Create Client
+                                Update Client
                             </button>
                         </div>
                     </div>
