@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {ref} from 'vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
-import { Link } from '@inertiajs/vue3';
+import {Link} from '@inertiajs/vue3';
+import Notification from "@/Components/Notification.vue";
 
 const sidebarOpen = ref(false);
 </script>
@@ -75,6 +76,7 @@ const sidebarOpen = ref(false);
                 class="flex-1"
                 :class="{'ml-64': sidebarOpen, 'ml-14': !sidebarOpen}"
             >
+                <Notification />
                 <slot />
             </main>
         </div>
