@@ -40,7 +40,7 @@ class LoginController extends Controller
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
-    public function destory(Request $request): RedirectResponse
+    public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 

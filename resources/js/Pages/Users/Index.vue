@@ -9,6 +9,7 @@ defineProps<{
 
 <template>
     <Head title="Users"/>
+
     <AuthenticatedLayout>
         <div class="m-4 rounded-md bg-gray-200">
             <p class="p-2 border-b">Users</p>
