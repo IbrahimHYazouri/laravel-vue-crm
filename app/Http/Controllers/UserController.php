@@ -51,7 +51,7 @@ class UserController extends Controller
 
         return Inertia::render('Users/Edit', [
             'user' => $user,
-            'roles' => $roles
+            'roles' => $roles,
         ]);
     }
 
@@ -59,7 +59,7 @@ class UserController extends Controller
     {
         $user->update($request->validated());
 
-        if ($request->has('terms_accepted') && !$user->terms_accepted_at) {
+        if ($request->has('terms_accepted') && ! $user->terms_accepted_at) {
             $user->terms_accepted_at = now();
             $user->save();
         }

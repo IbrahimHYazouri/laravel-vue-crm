@@ -6,7 +6,6 @@ use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,7 +19,8 @@ class ClientController extends Controller
         return Inertia::render('Clients/Index', ['clients' => $clients]);
     }
 
-    public function create(): Response {
+    public function create(): Response
+    {
         return Inertia::render('Clients/Create');
     }
 
