@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\ProjectStatus;
+use Carbon\CarbonImmutable;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -15,6 +17,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @property-read int $id
+ * @property-read string $title
+ * @property-read string $description
+ * @property-read int $client_id
+ * @property-read int $user_id
+ * @property-read DateTimeInterface $deadline
+ * @property-read string $status
+ * @property-read CarbonImmutable $created_at
+ * @property-read CarbonImmutable $updated_at
+ * @property-read CarbonImmutable $deleted_at
+ */
 final class Project extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia, SoftDeletes;
@@ -28,11 +42,17 @@ final class Project extends Model implements HasMedia
         'client_id',
     ];
 
-    protected $appends = ['deadline_formatted'];
+    protected $appends = ['deadline_formatted', 'created_at_formatted'];
 
     public function deadlineFormatted(): Attribute
     {
         return Attribute::get(fn () => $this->deadline?->format('Y-m-d')
+        );
+    }
+
+    public function createdAtFormatted(): Attribute
+    {
+        return Attribute::get(fn () => $this->created_at?->format('Y-m-d')
         );
     }
 

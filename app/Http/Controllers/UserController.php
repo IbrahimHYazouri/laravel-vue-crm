@@ -36,7 +36,7 @@ final class UserController extends Controller
 
         if ($request->has('terms_accepted')) {
             $user->update([
-                'terms_accepted_at' => now()
+                'terms_accepted_at' => now(),
             ]);
             $user->save();
         }
@@ -65,7 +65,7 @@ final class UserController extends Controller
 
         if ($request->has('terms_accepted') && ! $user->terms_accepted_at) {
             $user->update([
-                'terms_accepted_at' => now()
+                'terms_accepted_at' => now(),
             ]);
             $user->save();
         }
