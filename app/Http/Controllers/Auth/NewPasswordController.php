@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class NewPasswordController extends Controller
+final class NewPasswordController extends Controller
 {
     public function create(Request $request): Response
     {

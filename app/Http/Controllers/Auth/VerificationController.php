@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class VerificationController extends Controller
+final class VerificationController extends Controller
 {
     public function notice(Request $request): Response|RedirectResponse
     {

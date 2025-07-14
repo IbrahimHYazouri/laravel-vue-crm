@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Enums\ProjectStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreProjectRequest extends FormRequest
+final class StoreProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,7 +35,7 @@ class StoreProjectRequest extends FormRequest
             'attachments.*' => [
                 'file',
                 'mimes:jpg,jpeg,png,doc,docx,pdf',
-                'max:10240' // 10 MB max
+                'max:10240', // 10 MB max
             ],
         ];
     }

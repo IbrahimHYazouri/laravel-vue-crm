@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class RegisterUserController extends Controller
+final class RegisterUserController extends Controller
 {
     public function create(): Response
     {

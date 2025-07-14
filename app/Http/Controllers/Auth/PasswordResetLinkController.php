@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Password;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class PasswordResetLinkController extends Controller
+final class PasswordResetLinkController extends Controller
 {
     public function create(): Response
     {
