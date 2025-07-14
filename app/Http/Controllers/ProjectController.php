@@ -16,6 +16,10 @@ use Inertia\Response;
 
 final class ProjectController extends Controller
 {
+    public function __construct(
+        private ProjectService $projectService,
+    ) {}
+
     public function index(): Response
     {
         $projects = Project::with(['user', 'client'])
@@ -38,10 +42,18 @@ final class ProjectController extends Controller
         ]);
     }
 
-    public function store(StoreProjectRequest $request, ProjectService $service): RedirectResponse
+    public function store(StoreProjectRequest $request): RedirectResponse
     {
-        $service->createProject($request);
+        $this->projectService->createProject($request);
 
         return redirect()->route('projects.index')->with('success', __('Project created!'));
+    }
+
+    public function show(Project $project): Response
+    {
+        $project->load('user', 'client');
+        $attachments = $this->projectService->getProjectAttachments($project);
+
+        return Inertia::render('Projects/Show', ['project' => $project, 'attachments' => $attachments]);
     }
 }
