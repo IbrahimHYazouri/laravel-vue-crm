@@ -4,12 +4,15 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import {ref} from "vue";
 
 defineProps<{
     users: Object,
     clients: Object,
     statuses: Object
 }>()
+
+const selectedFiles = ref<File[]>([])
 
 const form = useForm({
     title: '',
@@ -20,6 +23,20 @@ const form = useForm({
     client_id: '',
     attachments: [] as FileList | null,
 })
+
+const handleFileChange = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+
+    if (target.files) {
+        selectedFiles.value = Array.from(target.files);
+        form.attachments = selectedFiles.value;
+    }
+}
+
+const removeFile = (index: number) => {
+    selectedFiles.value.splice(index, 1)
+    form.attachments = selectedFiles.value
+}
 
 const createProject = () => {
     form.post(route("projects.store"))
@@ -34,11 +51,11 @@ const createProject = () => {
             class="bg-white  rounded-lg shadow-sm border border-gray-200  overflow-hidden mb-6">
             <div class="p-6">
                 <form @submit.prevent="createProject" class="mt-6 space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-6 col-span-2">
-                            <h3
-                                class="text-lg font-medium text-gray-800  border-b border-gray-200 pb-2">
-                                Create Project</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="col-span-1 lg:col-span-2">
+                            <h3 class="text-lg font-medium text-gray-800 border-b border-gray-200 pb-2">
+                                Create Project
+                            </h3>
                         </div>
 
                         <div>
@@ -154,19 +171,35 @@ const createProject = () => {
 
                         <div>
                             <InputLabel for="attachments" value="Attachments"/>
-
                             <input
                                 id="attachments"
                                 type="file"
                                 multiple
-                                @change="e => form.attachments = e.target.files"
+                                @change="handleFileChange"
                                 class="w-full px-4 py-2 rounded-lg text-gray-700 bg-gray-50 border border-gray-300 file:border-0 file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-lg file:mr-4 hover:file:bg-indigo-700 transition-colors"
                             />
+                            <InputError :message="form.errors.attachments" class="mt-2"/>
+                        </div>
 
-                            <InputError
-                                :message="form.errors.attachments"
-                                class="mt-2"
-                            />
+                        <!-- File Preview Grid -->
+                        <div v-if="selectedFiles.length" class="col-span-1 lg:col-span-2">
+                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                                <div
+                                    v-for="(file, index) in selectedFiles"
+                                    :key="index"
+                                    class="relative bg-gray-100 border border-gray-300 rounded-lg p-3 shadow-sm"
+                                >
+                                    <button
+                                        @click="removeFile(index)"
+                                        class="absolute top-1 right-1 text-gray-500 hover:text-red-600 bg-white rounded-full size-5 flex items-center justify-center shadow"
+                                        title="Remove file"
+                                    >
+                                        &times;
+                                    </button>
+                                    <div class="text-sm font-semibold text-gray-800 truncate">{{ file.name }}</div>
+                                    <div class="text-xs text-gray-500 mt-1">{{ file.type || 'Unknown type' }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Enums\ProjectStatus;
+use App\Http\Requests\StoreProjectRequest;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\User;
+use App\Services\ProjectService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -33,5 +36,12 @@ class ProjectController extends Controller
             'statuses' => $statuses,
             'users' => $users,
         ]);
+    }
+
+    public function store(StoreProjectRequest $request, ProjectService $service): RedirectResponse
+    {
+        $service->createProject($request);
+
+        return redirect()->route('projects.index')->with('success', __('Project created!'));
     }
 }
