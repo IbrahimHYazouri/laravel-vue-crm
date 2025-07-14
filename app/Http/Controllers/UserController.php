@@ -12,7 +12,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
 
-class UserController extends Controller
+final class UserController extends Controller
 {
     public function index(): Response
     {
@@ -35,7 +35,9 @@ class UserController extends Controller
         $user = User::create($request->validated());
 
         if ($request->has('terms_accepted')) {
-            $user->terms_accepted_at = now();
+            $user->update([
+                'terms_accepted_at' => now()
+            ]);
             $user->save();
         }
 
@@ -62,7 +64,9 @@ class UserController extends Controller
         $user->update($request->validated());
 
         if ($request->has('terms_accepted') && ! $user->terms_accepted_at) {
-            $user->terms_accepted_at = now();
+            $user->update([
+                'terms_accepted_at' => now()
+            ]);
             $user->save();
         }
 

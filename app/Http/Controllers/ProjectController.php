@@ -14,7 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ProjectController extends Controller
+final class ProjectController extends Controller
 {
     public function index(): Response
     {

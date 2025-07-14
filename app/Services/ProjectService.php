@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class ProjectService
+final class ProjectService
 {
     public function createProject(StoreProjectRequest $request): Project
     {
@@ -38,6 +39,7 @@ class ProjectService
 
         if ($media) {
             $media->delete();
+
             return true;
         }
 

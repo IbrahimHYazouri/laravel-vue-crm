@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Project extends Model implements HasMedia
+final class Project extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia, SoftDeletes;
 
@@ -32,8 +32,7 @@ class Project extends Model implements HasMedia
 
     public function deadlineFormatted(): Attribute
     {
-        return Attribute::get(fn () =>
-        $this->deadline?->format('Y-m-d')
+        return Attribute::get(fn () => $this->deadline?->format('Y-m-d')
         );
     }
 

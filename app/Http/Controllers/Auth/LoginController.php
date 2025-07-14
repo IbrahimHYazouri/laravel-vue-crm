@@ -15,7 +15,7 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class LoginController extends Controller
+final class LoginController extends Controller
 {
     public function create(): Response
     {
@@ -53,6 +53,11 @@ class LoginController extends Controller
         return redirect('/');
     }
 
+    public function throttleKey(Request $request): string
+    {
+        return Str::transliterate(Str::lower($request->string('email')).'|'.$request->ip());
+    }
+
     protected function ensureIsNotRateLimited(Request $request): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey($request), 5)) {
@@ -69,10 +74,5 @@ class LoginController extends Controller
                 'minutes' => ceil($seconds / 60),
             ]),
         ]);
-    }
-
-    public function throttleKey(Request $request): string
-    {
-        return Str::transliterate(Str::lower($request->string('email')).'|'.$request->ip());
     }
 }

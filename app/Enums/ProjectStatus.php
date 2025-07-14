@@ -13,6 +13,11 @@ enum ProjectStatus: string
     case CANCELLED = 'cancelled';
     case COMPLETED = 'completed';
 
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
+
     public function label(): string
     {
         return match ($this) {
@@ -23,10 +28,5 @@ enum ProjectStatus: string
             self::CANCELLED => 'Cancelled',
             self::COMPLETED => 'Completed',
         };
-    }
-
-    public static function values(): array
-    {
-        return array_column(self::cases(), 'value');
     }
 }

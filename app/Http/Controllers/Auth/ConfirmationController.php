@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ConfirmationController extends Controller
+final class ConfirmationController extends Controller
 {
     public function create(): Response
     {
