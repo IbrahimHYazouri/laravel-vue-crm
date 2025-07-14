@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,5 +27,7 @@ Route::middleware(['auth', 'can:manage users'])->group(function () {
 });
 
 Route::resource('clients', ClientController::class)->middleware('auth');
+
+Route::resource('projects', ProjectController::class)->middleware('auth');
 
 require __DIR__.'/auth.php';

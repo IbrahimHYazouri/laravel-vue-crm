@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->foreignId('client_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->data('deadline');
+            $table->date('deadline');
             $table->string('status')->default('open');
             $table->timestamps();
             $table->softDeletes();
