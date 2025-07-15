@@ -35,6 +35,14 @@ final class ProjectService
         });
     }
 
+    public function deleteProject(Project $project): void
+    {
+        DB::transaction(function () use ($project) {
+            $project->clearMediaCollection('attachments');
+            $project->delete();
+        });
+    }
+
     public function getProjectAttachments(Project $project): MediaCollection
     {
         return $project->getMedia('attachments');
