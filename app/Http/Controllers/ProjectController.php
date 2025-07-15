@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\ProjectStatus;
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\User;
@@ -17,7 +18,7 @@ use Inertia\Response;
 final class ProjectController extends Controller
 {
     public function __construct(
-        private ProjectService $projectService,
+        private readonly ProjectService $projectService,
     ) {}
 
     public function index(): Response
@@ -55,5 +56,29 @@ final class ProjectController extends Controller
         $attachments = $this->projectService->getProjectAttachments($project);
 
         return Inertia::render('Projects/Show', ['project' => $project, 'attachments' => $attachments]);
+    }
+
+    public function edit(Project $project): Response
+    {
+        $project->load('user', 'client');
+        $users = User::all()->append('full_name');
+        $clients = Client::all();
+        $statuses = ProjectStatus::cases();
+        $attachments = $this->projectService->getProjectAttachments($project);
+
+        return Inertia::render('Projects/Edit', [
+            'project' => $project,
+            'users' => $users,
+            'clients' => $clients,
+            'statuses' => $statuses,
+            'attachments' => $attachments,
+        ]);
+    }
+
+    public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
+    {
+        $this->projectService->updateProject($request, $project);
+
+        return redirect()->route('projects.index')->with('success', __('Project updated!'));
     }
 }

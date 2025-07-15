@@ -5,26 +5,33 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 final class ProjectService
 {
     public function createProject(StoreProjectRequest $request): Project
     {
-        $project = Project::create($request->validated());
+        return DB::transaction(function () use ($request) {
+            $project = Project::create($request->validated());
 
-        if ($request->hasFile('attachments')) {
-            $this->attachFiles($project, $request->file('attachments'));
-        }
+            $this->attachFiles($project, $request);
 
-        return $project->load(['user', 'client']);
+            return $project;
+        });
     }
 
-    public function attachFiles(Project $project, array $files): void
+    public function updateProject(UpdateProjectRequest $request, Project $project)
     {
-        collect($files)->each(function ($file) use ($project) {
-            $project->addMedia($file)->toMediaCollection('attachments');
+        return DB::transaction(function () use ($request, $project) {
+            $project->update($request->validated());
+
+            $this->removeAttachment($project, $request);
+            $this->attachFiles($project, $request);
+
+            return $project->fresh();
         });
     }
 
@@ -33,16 +40,32 @@ final class ProjectService
         return $project->getMedia('attachments');
     }
 
-    public function removeAttachment(Project $project, int $mediaId): bool
+    private function removeAttachment(Project $project, UpdateProjectRequest $request): void
     {
-        $media = $project->getMedia('attachments')->where('id', $mediaId)->first();
+        $removedIds = $request->input('removed_attachments', []);
 
-        if ($media) {
-            $media->delete();
-
-            return true;
+        if (empty($removedIds)) {
+            return;
         }
 
-        return false;
+        foreach ($removedIds as $mediaId) {
+            $media = $project->getMedia('attachments')->find($mediaId);
+            if ($media) {
+                $media->delete();
+            }
+        }
+    }
+
+    private function attachFiles(Project $project, StoreProjectRequest|UpdateProjectRequest $request): void
+    {
+        if (! $request->hasFile('attachments')) {
+            return;
+        }
+
+        foreach ($request->file('attachments') as $file) {
+            $project
+                ->addMedia($file)
+                ->toMediaCollection('attachments');
+        }
     }
 }
