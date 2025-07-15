@@ -6,10 +6,11 @@ namespace App\Models;
 
 use App\Enums\TaskStatus;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Query\Builder;
 
 final class Task extends Model
 {
@@ -24,6 +25,14 @@ final class Task extends Model
         'deadline',
         'status',
     ];
+
+    protected $appends = ['deadline_formatted'];
+
+    public function deadlineFormatted(): Attribute
+    {
+        return Attribute::get(fn () => $this->deadline?->format('Y-m-d')
+        );
+    }
 
     public function casts(): array
     {
