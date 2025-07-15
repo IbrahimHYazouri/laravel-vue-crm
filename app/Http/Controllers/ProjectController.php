@@ -12,6 +12,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Services\ProjectService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -80,5 +81,14 @@ final class ProjectController extends Controller
         $this->projectService->updateProject($request, $project);
 
         return redirect()->route('projects.index')->with('success', __('Project updated!'));
+    }
+
+    public function destroy(Project $project): RedirectResponse
+    {
+        Gate::authorize('delete');
+
+        $this->projectService->deleteProject($project);
+
+        return redirect()->route('projects.index')->with('success', __('Project deleted!'));
     }
 }
