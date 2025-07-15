@@ -41,7 +41,8 @@ const statusClasses = computed(() => {
                     <p class="text-gray-600 mt-1">Project Details</p>
                 </div>
                 <div class="flex space-x-3">
-                    <span
+                    <Link
+                        :href="route('projects.edit', project.id)"
                         class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none transition-colors">
                         <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -49,7 +50,7 @@ const statusClasses = computed(() => {
                             </path>
                         </svg>
                         Edit Project
-                    </span>
+                    </Link>
                     <Link :href="route('projects.index')"
                           class="px-4 py-2 border border-gray-300  text-gray-700  rounded-md hover:bg-gray-50  focus:outline-none transition-colors">
                         <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
