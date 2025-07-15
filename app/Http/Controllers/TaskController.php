@@ -4,6 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateTaskAction;
+use App\Enums\TaskStatus;
+use App\Http\Requests\StoreTaskRequest;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -11,6 +19,36 @@ final class TaskController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Tasks/Index');
+        $tasks = Task::with(['user', 'client', 'project'])
+            ->filterStatus(request('status'))
+            ->paginate(20);
+
+        return Inertia::render('Tasks/Index', ['tasks' => $tasks]);
+    }
+
+    public function create(): Response
+    {
+        $users = User::all()->append('full_name');
+        $projects = Project::all();
+        $statuses = TaskStatus::cases();
+
+        return Inertia::render('Tasks/Create', [
+            'users' => $users,
+            'projects' => $projects,
+            'statuses' => $statuses,
+        ]);
+    }
+
+    public function store(StoreTaskRequest $request, CreateTaskAction $createTaskAction): RedirectResponse
+    {
+        try {
+            $createTaskAction->execute($request->validated());
+
+            return redirect()->route('tasks.index')->with('success', __('Task created successfully.'));
+        } catch (ModelNotFoundException $ex) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', __('The selected project was not found.'));
+        }
     }
 }
