@@ -4,10 +4,19 @@ import { usePage } from '@inertiajs/vue3';
 
 const visible = ref(true);
 const page = usePage();
-const message = page.props.flash.status;
+const successMessage = page.props.flash.status;
+const errorMessage = page.props.flash.error;
 
 watch(
     () => page.props.flash.status,
+    (val) => {
+        visible.value = !!val;
+    },
+    { immediate: true }
+);
+
+watch(
+    () => page.props.flash.error,
     (val) => {
         visible.value = !!val;
     },
@@ -17,8 +26,10 @@ watch(
 
 <template>
     <div
-        v-if="visible && message"
-        class="w-[70%] m-5 bg-green-100 border-l-4 border-green-500 text-green-800 px-4 py-3 mb-4 relative rounded"
+        v-if="visible && (successMessage || errorMessage)"
+        class="w-[70%] m-5 bg-green-100 border-l-4 px-4 py-3 mb-4 relative rounded"
+        :class="{'border-green-500 text-green-800': successMessage,
+        'border-red-500 text-red-800': errorMessage}"
         role="alert"
     >
         <span class="block sm:inline">{{ message }}</span>

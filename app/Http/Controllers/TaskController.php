@@ -13,7 +13,9 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -79,5 +81,20 @@ final class TaskController extends Controller
                 ->withInput()
                 ->with('error', __('The selected project was not found.'));
         }
+    }
+
+    public function destroy(Task $task): RedirectResponse
+    {
+        Gate::authorize('delete');
+
+        try {
+            $task->delete();
+        } catch (QueryException $ex) {
+            if ($ex->getCode() === '23000') {
+                return redirect()->back()->with('status', 'Task belongs to project. Cannot delete.');
+            }
+        }
+
+        return redirect()->route('tasks.index')->with('status', 'Task deleted successfully.');
     }
 }
