@@ -47,6 +47,13 @@ final class TaskController extends Controller
         return redirect()->route('tasks.index')->with('status', __('Task created successfully.'));
     }
 
+    public function show(Task $task): Response
+    {
+        $task->load('user', 'project', 'project.client');
+
+        return Inertia::render('Tasks/Show', ['task' => $task]);
+    }
+
     public function edit(Task $task): Response
     {
         $users = User::all()->append('full_name');
