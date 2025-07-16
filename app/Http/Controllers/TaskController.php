@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\CreateTaskAction;
+use App\Actions\UpdateTaskAction;
 use App\Enums\TaskStatus;
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
@@ -44,7 +46,34 @@ final class TaskController extends Controller
         try {
             $createTaskAction->execute($request->validated());
 
-            return redirect()->route('tasks.index')->with('success', __('Task created successfully.'));
+            return redirect()->route('tasks.index')->with('status', __('Task created successfully.'));
+        } catch (ModelNotFoundException $ex) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', __('The selected project was not found.'));
+        }
+    }
+
+    public function edit(Task $task): Response
+    {
+        $users = User::all()->append('full_name');
+        $projects = Project::all();
+        $statuses = TaskStatus::cases();
+
+        return Inertia::render('Tasks/Edit', [
+            'task' => $task,
+            'users' => $users,
+            'projects' => $projects,
+            'statuses' => $statuses,
+        ]);
+    }
+
+    public function update(UpdateTaskRequest $request, Task $task, UpdateTaskAction $updateTaskAction): RedirectResponse
+    {
+        try {
+            $updateTaskAction->execute($task, $request->validated());
+
+            return redirect()->route('tasks.index')->with('status', __('Task updated successfully.'));
         } catch (ModelNotFoundException $ex) {
             return redirect()->back()
                 ->withInput()
