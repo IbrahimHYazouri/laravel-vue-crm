@@ -294,6 +294,66 @@ const statusClasses = computed(() => {
                 </div>
                 <!-- Client Information /-->
 
+                <!-- Task Information -->
+                <div class="bg-white  rounded-lg shadow-sm border border-gray-200  overflow-hidden">
+                    <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 ">
+                        <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                </path>
+                            </svg>
+                            Tasks Information
+                        </h3>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                    </path>
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Total Tasks</p>
+                                    <p class="text-gray-900">
+                                        {{ project.tasks.length }} tasks
+                                    </p>
+                                </div>
+                            </div>
+                            <div v-if="project.tasks.length > 0">
+                                <div class="space-y-3">
+                                    <div class="border-t border-gray-200 pt-3">
+                                        <p class="text-sm font-medium text-gray-500  mb-2">Task List</p>
+                                        <div
+                                            v-for="task in project.tasks"
+                                            class="space-y-2">
+                                            <Link :href="route('tasks.show', task.id)">
+                                                <div class="flex items-center justify-between">
+                                                        <span
+                                                            class="text-sm text-gray-900-100">{{ task.title }}
+                                                            - {{task.user.full_name}}</span>
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                                                        :class="{'bg-blue-100 text-blue-800': task.status === 'open',
+                                                    'bg-yellow-100 text-yellow-800': task.status === 'in progress', 'bg-green-100 text-green-800': task.status === 'completed',
+                                                    'bg-red-100 text-red-800': task.status === 'blocked'}">
+                                                            {{ task.status }}
+                                                </span>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Task Information /-->
+
                 <!-- Client Address Section -->
                 <div
                     v-if="project.client.company_address || project.client.company_city"
@@ -335,6 +395,87 @@ const statusClasses = computed(() => {
                 <!-- Client Address Section /-->
             </div>
 
+            <div v-if="project.tasks.length > 0" class="mt-6">
+                <div
+                    class="bg-white  rounded-lg shadow-sm border border-gray-200  overflow-hidden">
+                    <div class="px-6 py-4 bg-gray-50  border-b border-gray-200 ">
+                        <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                </path>
+                            </svg>
+                            Project Tasks
+                        </h3>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-20000">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Task
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Assigned To
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Deadline
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr v-for="task in project.tasks" class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900 ">
+                                            {{task.title}}
+                                        </div>
+                                        <div v-if="task.description" class="text-sm text-gray-500 truncate max-w-xs">
+                                            {{task.description}}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">
+                                            {{ task.user.full_name }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+    :class="{'bg-blue-100 text-blue-800': task.status === 'open',
+                                                    'bg-yellow-100 text-yellow-800': task.status === 'in progress', 'bg-green-100 text-green-800': task.status === 'completed',
+                                                    'bg-red-100 text-red-800': task.status === 'blocked'}">
+                                                            {{ task.status }}
+                                                </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{task.deadline_formatted ?? 'No Deadline'}}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <Link :href="route('tasks.show', task.id)"
+                                           class="text-blue-600 hover:text-blue-900">
+                                            View
+                                        </Link>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- Media Files Section -->
             <div v-if="attachments && attachments.length > 0" class="mt-6">
                 <div  class="bg-white rounded-lg shadow-sm border border-gray-200  overflow-hidden">
@@ -360,7 +501,6 @@ const statusClasses = computed(() => {
                 </div>
             </div>
             <!-- Media Files Section /-->
-            <!-- Project details /-->
         </div>
     </AuthenticatedLayout>
 </template>
