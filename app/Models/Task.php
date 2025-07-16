@@ -47,11 +47,6 @@ final class Task extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function client(): BelongsTo
-    {
-        return $this->belongsTo(Client::class);
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -112,7 +112,7 @@ defineProps<{
                             <div class="text-sm text-gray-900">{{ task.description }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">{{ task.client.company_name }}</div>
+                            <div class="text-sm text-gray-900">{{ task.project.client.company_name }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ task.project.title }}</div>
