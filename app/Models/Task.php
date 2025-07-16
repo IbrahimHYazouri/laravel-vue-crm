@@ -26,11 +26,17 @@ final class Task extends Model
         'status',
     ];
 
-    protected $appends = ['deadline_formatted'];
+    protected $appends = ['deadline_formatted', 'created_at_formatted'];
 
     public function deadlineFormatted(): Attribute
     {
         return Attribute::get(fn () => $this->deadline?->format('Y-m-d')
+        );
+    }
+
+    public function createdAtFormatted(): Attribute
+    {
+        return Attribute::get(fn () => $this->created_at?->format('Y-m-d')
         );
     }
 

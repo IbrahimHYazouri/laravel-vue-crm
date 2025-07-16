@@ -89,7 +89,8 @@ defineProps<{
                     <tbody class="bg-white  divide-y divide-gray-200">
                     <tr v-if="tasks" v-for="task in tasks.data" class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap">
-                                <span
+                                <Link
+                                    :href="route('tasks.show', task.id)"
                                     class="flex items-center text-sm text-gray-800 hover:text-indigo-600 transition-colors cursor-pointer">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="h-4 w-4 mr-2"
@@ -103,7 +104,7 @@ defineProps<{
                                               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
                                     <span>Show details</span>
-                                </span>
+                                </Link>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ task.title }}</div>
