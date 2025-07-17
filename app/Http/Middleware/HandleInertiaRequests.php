@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -37,6 +38,9 @@ final class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
                 'permissions' => $request->user() ? $request->user()->getAllPermissions()->pluck('name') : [],
+                'unreadNotificationCount' => fn () => Auth::check()
+                    ? Auth::user()->unreadNotifications()->count()
+                    : 0,
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),

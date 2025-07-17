@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use App\Notifications\TaskAssigned;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -42,7 +43,10 @@ final class TaskController extends Controller
 
     public function store(StoreTaskRequest $request): RedirectResponse
     {
-        Task::create($request->validated());
+        $task = Task::create($request->validated());
+        $user = User::find($request->user_id);
+
+        $user->notify(new TaskAssigned($task));
 
         return redirect()->route('tasks.index')->with('status', __('Task created successfully.'));
     }
@@ -70,6 +74,12 @@ final class TaskController extends Controller
 
     public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
+        if ($task->user_id !== $request->user_id) {
+            $user = User::find($request->user_id);
+
+            $user->notify(new TaskAssigned($task));
+        }
+
         $task->update($request->validated());
 
         return redirect()->route('tasks.index')->with('status', __('Task updated successfully.'));
