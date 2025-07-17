@@ -53,7 +53,7 @@ final class ProjectController extends Controller
 
     public function show(Project $project): Response
     {
-        $project->load('user', 'client');
+        $project->load('user', 'client', 'tasks', 'tasks.user');
         $attachments = $this->projectService->getProjectAttachments($project);
 
         return Inertia::render('Projects/Show', ['project' => $project, 'attachments' => $attachments]);
