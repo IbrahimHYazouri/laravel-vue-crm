@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\User;
+use App\Notifications\ProjectAssigned;
 use App\Services\ProjectService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -46,7 +47,10 @@ final class ProjectController extends Controller
 
     public function store(StoreProjectRequest $request): RedirectResponse
     {
-        $this->projectService->createProject($request);
+        $project = $this->projectService->createProject($request);
+
+        $user = User::find($request->user_id);
+        $user->notify(new ProjectAssigned($project));
 
         return redirect()->route('projects.index')->with('success', __('Project created!'));
     }
@@ -78,6 +82,12 @@ final class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
     {
+        if ($project->user_id !== $request->user_id) {
+            $user = User::find($request->user_id);
+
+            $user->notify(new ProjectAssigned($project));
+        }
+
         $this->projectService->updateProject($request, $project);
 
         return redirect()->route('projects.index')->with('success', __('Project updated!'));
