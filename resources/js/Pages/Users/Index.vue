@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {Head, Link} from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Pagination from "@/Components/molecules/Pagination.vue";
 
 defineProps<{
-    users: Object
+    users: Object,
+    with_deleted: boolean
 }>();
 </script>
 
@@ -19,9 +21,18 @@ defineProps<{
                     class="w-fit px-2 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">+ Add User
                 </Link>
                 <hr/>
-                <button class="w-fit px-2 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 border-b">Show
+                <Link
+                    v-if="with_deleted"
+                    :href="route('users.index')"
+                    class="w-fit px-2 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 border-b">Show
+                    all users
+                </Link>
+                <Link
+                    v-else
+                    :href="route('users.index', {deleted: true})"
+                    class="w-fit px-2 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 border-b">Show
                     deleted users
-                </button>
+                </Link>
             </div>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -125,7 +136,6 @@ defineProps<{
                     </tr>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </AuthenticatedLayout>

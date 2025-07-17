@@ -8,6 +8,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
@@ -17,10 +18,16 @@ final class UserController extends Controller
     public function index(): Response
     {
         $users = User::query()
+            ->when(request('deleted'), function ($query) {
+                return $query->onlyTrashed();
+            })
             ->with('roles')
-            ->paginate(20);
+            ->paginate(2);
 
-        return Inertia::render('Users/Index', ['users' => $users]);
+        return Inertia::render('Users/Index', [
+            'users' => $users,
+            'with_deleted' => request('deleted'),
+        ]);
     }
 
     public function create(): Response
