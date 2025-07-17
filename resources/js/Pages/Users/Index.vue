@@ -5,7 +5,7 @@ import Pagination from "@/Components/molecules/Pagination.vue";
 
 defineProps<{
     users: Object,
-    with_deleted: boolean
+    with_deleted?: boolean
 }>();
 </script>
 
@@ -136,6 +136,9 @@ defineProps<{
                     </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="mt-4 p-6">
+                <Pagination :links="users.links"/>
             </div>
         </div>
     </AuthenticatedLayout>
