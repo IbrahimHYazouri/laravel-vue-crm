@@ -8,7 +8,6 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
@@ -22,7 +21,7 @@ final class UserController extends Controller
                 return $query->onlyTrashed();
             })
             ->with('roles')
-            ->paginate(2);
+            ->paginate(20);
 
         return Inertia::render('Users/Index', [
             'users' => $users,

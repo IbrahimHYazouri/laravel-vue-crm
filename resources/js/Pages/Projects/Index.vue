@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {Head, Link} from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Pagination from "@/Components/molecules/Pagination.vue";
 
 defineProps<{
     projects: Object
@@ -149,6 +150,10 @@ defineProps<{
                     </tr>
                     </tbody>
                 </table>
+
+                <div class="mt-4 p-6">
+                    <Pagination :links="projects.links"/>
+                </div>
             </div>
         </div>
     </AuthenticatedLayout>
