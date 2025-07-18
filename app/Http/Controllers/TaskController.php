@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Enums\TaskStatus;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Mail\MailTaskAssigned;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
@@ -14,6 +15,7 @@ use App\Notifications\TaskAssigned;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -47,6 +49,7 @@ final class TaskController extends Controller
         $user = User::find($request->user_id);
 
         $user->notify(new TaskAssigned($task));
+        Mail::to($user->email)->queue(new MailTaskAssigned($task));
 
         return redirect()->route('tasks.index')->with('status', __('Task created successfully.'));
     }
@@ -78,6 +81,7 @@ final class TaskController extends Controller
             $user = User::find($request->user_id);
 
             $user->notify(new TaskAssigned($task));
+            Mail::to($user->email)->send(new MailTaskAssigned($task));
         }
 
         $task->update($request->validated());
