@@ -31,7 +31,8 @@ const sidebarOpen = ref(false);
                 <!-- Right side -->
                 <div class="flex items-center space-x-4" v-if="$page.props.auth.user">
                     <!-- Notifications -->
-                    <span
+                    <Link
+                        :href="route('notifications.index')"
                         class="text-indigo-600 hover:text-indigo-900 relative"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -44,7 +45,7 @@ const sidebarOpen = ref(false);
                         >
                             {{$page.props.auth.unreadNotificationCount}}
                         </span>
-                    </span>
+                    </Link>
 
                     <!-- Dropdown using your Dropdown component -->
                     <Dropdown align="right" width="48">

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -21,6 +22,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('index');
+        Route::put('/{notification}', [NotificationController::class, 'update'])->name('update');
+        Route::delete('/', [NotificationController::class, 'destroy'])->name('destroy');
+    });
 
     Route::get('/media/{media}/download', [MediaController::class, 'download'])->name('media.download');
 });
