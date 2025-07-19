@@ -12,7 +12,8 @@ defineProps<{
         <div  class="bg-white  rounded-lg shadow-sm border border-gray-200  overflow-hidden m-4">
             <div class="p-6">
                 <div v-if="notifications.data.length" class="w-full mb-4">
-                    <Link :href="route('notifications.destroy')" class="text-white text-sm py-1 px-3 rounded-lg focus:outline-none transition-colors flex items-center justify-center bg-blue-600 hover:bg-blue-700 w-fit">
+                    <Link :href="route('notifications.destroy')"
+                          method="delete" class="text-white text-sm py-1 px-3 rounded-lg focus:outline-none transition-colors flex items-center justify-center bg-blue-600 hover:bg-blue-700 w-fit">
                         Mark all as read
                     </Link>
                 </div>
