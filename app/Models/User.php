@@ -46,6 +46,7 @@ final class User extends Authenticatable
         'password',
         'address',
         'phone_number',
+        'terms_accepted_at'
     ];
 
     /**
