@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Models\Client;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-final class ClientPageTest extends TestCase
+final class TasksPageTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -26,61 +26,61 @@ final class ClientPageTest extends TestCase
         Role::create(['name' => 'user']);
     }
 
-    public function test_user_with_admin_role_can_view_clients_index_page()
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $user->assignRole('admin');
-
-        $this->actingAs($user)
-            ->get('/clients')
-            ->assertOk();
-    }
-
-    public function test_user_with_user_role_can_view_clients_index_page()
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $this->actingAs($user)
-            ->get('/clients')
-            ->assertOk();
-    }
-
-    public function test_user_with_admin_role_can_delete_clients()
+    public function test_user_with_admin_role_can_view_tasks_index_page()
     {
         /** @var User $user */
         $admin = User::factory()->create();
 
         $admin->assignRole('admin');
 
-        /** @var Client $clientToDelete */
-        $clientToDelete = Client::factory()->create();
-
         $this->actingAs($admin)
-            ->delete('/clients/'.$clientToDelete->id)
-            ->assertRedirect();
-
-        $this->assertSoftDeleted('clients', [
-            'id' => $clientToDelete->id,
-        ]);
+            ->get('/tasks')
+            ->assertOk();
     }
 
-    public function test_user_with_user_role_cannot_delete_clients()
+    public function test_user_with_user_role_can_view_tasks_index_page()
     {
         /** @var User $user */
         $user = User::factory()->create();
 
-        /** @var Client $clientToDelete */
-        $clientToDelete = Client::factory()->create();
+        $this->actingAs($user)
+            ->get('/tasks')
+            ->assertOk();
+    }
+
+    public function test_user_with_admin_role_can_delete_tasks()
+    {
+        /** @var User $user */
+        $admin = User::factory()->create();
+
+        $admin->assignRole('admin');
+
+        /** @var Task $taskToDelete */
+        $taskToDelete = Task::factory()->create();
+
+        $this->actingAs($admin)
+            ->delete('/tasks/'.$taskToDelete->id)
+            ->assertRedirect();
+
+        $this->assertSoftDeleted('tasks', [
+            'id' => $taskToDelete->id,
+        ]);
+    }
+
+    public function test_user_with_user_role_cannot_delete_tasks()
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        /** @var Task $taskToDelete */
+        $taskToDelete = Task::factory()->create();
 
         $this->actingAs($user)
-            ->delete('/clients/'.$clientToDelete->id)
+            ->delete('/tasks/'.$taskToDelete->id)
             ->assertForbidden();
 
-        $this->assertDatabaseHas('clients', [
-            'id' => $clientToDelete->id,
+        $this->assertDatabaseHas('tasks', [
+            'id' => $taskToDelete->id,
         ]);
     }
 }
